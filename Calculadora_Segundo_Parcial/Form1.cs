@@ -113,7 +113,18 @@ namespace Calculadora_Segundo_Parcial
             //Sin error
             return false;
         }
-        string Resolver(string expresion) {
+        string Resolver(string expresion)
+        {
+            int valor1, valor2;
+            valor1 = Convert.ToInt32(expresion[0].ToString());
+            valor2 = Convert.ToInt32(expresion[2].ToString());
+            if (expresion[1] == '*')
+                return (valor1 * valor2).ToString();
+            else
+                return (valor1 + valor2).ToString();
+        }
+        //Entrar a los parentesis para resolver desde adentro
+        string Entrar_parentesis(string expresion) {
 
             int InParAbierto, InParCerrado=0, parentesis=0;
             InParAbierto = expresion.IndexOf('(');
@@ -135,7 +146,7 @@ namespace Calculadora_Segundo_Parcial
 
                 while(InParAbierto >= 0)
                 {
-                    expresion = expresion.Replace(expresion.Substring(InParAbierto, InParCerrado - InParAbierto + 1), Resolver(expresion.Substring(InParAbierto + 1, InParCerrado - InParAbierto - 1)));
+                    expresion = expresion.Replace(expresion.Substring(InParAbierto, InParCerrado - InParAbierto + 1), Entrar_parentesis(expresion.Substring(InParAbierto + 1, InParCerrado - InParAbierto - 1)));
                     InParAbierto = expresion.IndexOf('(');
                     for (int k = InParAbierto + 1; k < expresion.Length; k++)
                     {
@@ -152,35 +163,11 @@ namespace Calculadora_Segundo_Parcial
                 return expresion;
             }
             else
-                return expresion;
-        }
-
-        /*string Parse_String(string expresion)
-        {
-            string expresionRaiz3;
-            int aparicion_raiz3;
-            aparicion_raiz3=expresion.IndexOf("³√");
-            
-            if (expresion[aparicion_raiz3 + 1] != '(')
             {
-                int k= aparicion_raiz3;
-                while (Is_Number(expresion[k]))
-                {
-                    k++;
-                }
-                expresionRaiz3 = expresion.Substring(aparicion_raiz3, k-1);
-                expresion = expresion.Replace("³√"+ expresionRaiz3, expresionRaiz3+"^(1/3)");
+                return Resolver(expresion);
             }
-            
-            
-
-            expresion = expresion.Replace("³", "^3");
-            expresion = expresion.Replace("²", "^2");
-            expresion = expresion.Replace("⁻¹", "^(-1)");
-            expresion = expresion.Replace("√", "sqrt");
-
-            return expresion;
-        }*/
+                
+        }
 
         //Sumatoria y factorial
         public int Fact_Sigma(int n, int flag)
@@ -232,7 +219,7 @@ namespace Calculadora_Segundo_Parcial
                 PantallaEcuacion.Text = "Syntax Error";
             else
             {
-                PantallaResultados.Text = Resolver(PantallaEcuacion.Text);
+                PantallaResultados.Text = Entrar_parentesis(PantallaEcuacion.Text);
             }
                 
 
