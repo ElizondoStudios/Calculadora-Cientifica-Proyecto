@@ -117,7 +117,6 @@ namespace Calculadora_Segundo_Parcial
 
             int InParAbierto, InParCerrado=0, parentesis=0;
             InParAbierto = expresion.IndexOf('(');
-            
 
             if (InParAbierto >= 0)
             {
@@ -134,7 +133,23 @@ namespace Calculadora_Segundo_Parcial
                         parentesis--;
                 }
 
-                return expresion.Replace(expresion.Substring(InParAbierto, InParCerrado - InParAbierto+1), Resolver(expresion.Substring(InParAbierto + 1, InParCerrado - InParAbierto -1)));
+                while(InParAbierto >= 0)
+                {
+                    expresion = expresion.Replace(expresion.Substring(InParAbierto, InParCerrado - InParAbierto + 1), Resolver(expresion.Substring(InParAbierto + 1, InParCerrado - InParAbierto - 1)));
+                    InParAbierto = expresion.IndexOf('(');
+                    for (int k = InParAbierto + 1; k < expresion.Length; k++)
+                    {
+                        if (expresion[k] == ')' && parentesis == 0)
+                        {
+                            InParCerrado = k;
+                        }
+                        else if (expresion[k] == '(')
+                            parentesis++;
+                        else if (expresion[k] == ')')
+                            parentesis--;
+                    }
+                }
+                return expresion;
             }
             else
                 return expresion;
@@ -256,7 +271,11 @@ namespace Calculadora_Segundo_Parcial
             if (SHIFT)
                 Application.Exit();
             else
+            {
                 PantallaEcuacion.Text = "";
+                PantallaResultados.Text = "";
+            }
+                
         }
 
         private void Punto_Click(object sender, EventArgs e)
