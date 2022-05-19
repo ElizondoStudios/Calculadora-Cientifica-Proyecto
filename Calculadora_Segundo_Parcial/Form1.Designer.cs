@@ -86,7 +86,6 @@
             // PantallaEcuacion
             // 
             this.PantallaEcuacion.BackColor = System.Drawing.Color.PaleGreen;
-            this.PantallaEcuacion.Enabled = false;
             this.PantallaEcuacion.Font = new System.Drawing.Font("SQUARED2", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.PantallaEcuacion.ForeColor = System.Drawing.SystemColors.ControlText;
             this.PantallaEcuacion.Location = new System.Drawing.Point(39, 48);

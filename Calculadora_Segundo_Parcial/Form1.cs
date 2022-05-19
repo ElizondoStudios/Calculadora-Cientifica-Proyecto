@@ -15,10 +15,43 @@ namespace Calculadora_Segundo_Parcial
         public Form1()
         {
             InitializeComponent();
+
+            Suma.simbolo = "+";
+            Suma.jerarquia = 1;
+            Suma.lateralidal = 3;
+
+            Resta.simbolo = "-";
+            Resta.jerarquia = 1;
+            Resta.lateralidal = 3;
+
+            Multiplicacion.simbolo = "*";
+            Multiplicacion.jerarquia = 2;
+            Multiplicacion.lateralidal = 3;
+
+            Division.simbolo = "/";
+            Division.jerarquia = 2;
+            Division.lateralidal = 3;
         }
-        public double Val1=0, Val2=0;
         bool SHIFT= false, HYP= false;
 
+        //Operadores clase y declaracion 
+        public class Operador
+        {
+            public string simbolo;
+            public int jerarquia;
+            public int lateralidal; // 1=unilateralidad izq  2=unilateralidad der  3=bilateralidad
+        }
+        public Operador Suma = new Operador();
+        public Operador Resta = new Operador();
+        public Operador Multiplicacion = new Operador();
+        public Operador Division = new Operador();
+        public Operador Potenciacion = new Operador();
+        public Operador Cubo = new Operador();
+        public Operador Cuadrado = new Operador();
+        public Operador RaizCuad = new Operador();
+        public Operador RaizCub = new Operador();
+        public Operador RaizX = new Operador();
+        public Operador Inversa = new Operador();
         bool Is_Operador(char simbolo)
         {
             if (simbolo == '+')
@@ -113,16 +146,37 @@ namespace Calculadora_Segundo_Parcial
             //Sin error
             return false;
         }
-        string Resolver(string expresion)
+
+        //Tomar derecha 
+        double TomarDerecha(string expresion)
         {
-            int valor1, valor2;
-            valor1 = Convert.ToInt32(expresion[0].ToString());
-            valor2 = Convert.ToInt32(expresion[2].ToString());
-            if (expresion[1] == '*')
-                return (valor1 * valor2).ToString();
-            else
-                return (valor1 + valor2).ToString();
+            bool Final= false;
+            int k= expresion.Length-3;
+            while (!Final && k>0)
+            {
+                if (Is_Operador(expresion[k]))
+                    Final = true;
+                else
+                    k--;
+            }
+            return Convert.ToDouble(expresion.Substring(k + 1));
         }
+
+        //Tomar izq
+        double TomarIzq(string expresion)
+        {
+            bool Final = false;
+            int k = 0;
+            while (!Final && k < expresion.Length)
+            {
+                if (Is_Operador(expresion[k]))
+                    Final = true;
+                else
+                    k++;
+            }
+            return Convert.ToDouble(expresion.Substring(1, k));
+        }
+
         //Entrar a los parentesis para resolver desde adentro
         string Entrar_parentesis(string expresion) {
 
@@ -144,6 +198,7 @@ namespace Calculadora_Segundo_Parcial
                         parentesis--;
                 }
 
+                //Resolver en caso de que haya más de un parentesis en el mismo nivel
                 while(InParAbierto >= 0)
                 {
                     expresion = expresion.Replace(expresion.Substring(InParAbierto, InParCerrado - InParAbierto + 1), Entrar_parentesis(expresion.Substring(InParAbierto + 1, InParCerrado - InParAbierto - 1)));
@@ -160,11 +215,14 @@ namespace Calculadora_Segundo_Parcial
                             parentesis--;
                     }
                 }
+                MessageBox.Show("Resolver( " + expresion + ")");
                 return expresion;
             }
             else
             {
-                return Resolver(expresion);
+                //Aquí se manda a resolver
+                MessageBox.Show("Resolver( " + expresion + ")");
+                return expresion;
             }
                 
         }
@@ -221,8 +279,6 @@ namespace Calculadora_Segundo_Parcial
             {
                 PantallaResultados.Text = Entrar_parentesis(PantallaEcuacion.Text);
             }
-                
-
         }
 
         private void Sumar_Click(object sender, EventArgs e)
