@@ -169,8 +169,8 @@ namespace Calculadora_Segundo_Parcial
 
             switch (jerarquia)
             {
-
-                case 1:
+                
+                case 1: //Jerarquia 1
                     for (int k = 1; k < expresion.Length; k++)
                     {
                         if (expresion[k] == '+')
@@ -189,11 +189,18 @@ namespace Calculadora_Segundo_Parcial
                             expresion = expresion.Replace(Val1.ToString() + "-" + Val2.ToString(), Resultado.ToString());
                             return Resolver(expresion, 1);
                         }
+                        else if(expresion[k]== 'Σ')
+                        {
+                            Val1 = Tomar_Izquierda(expresion.Substring(0, k));
+                            Resultado = Fact_Sigma((int)Val1, 2);
+                            expresion = expresion.Replace(Val1.ToString() + "Σ", Resultado.ToString());
+                            return Resolver(expresion, 1);
+                        }
 
                     }
                     break;
 
-                case 2:
+                case 2: //Jerarquia 2
                     for (int k = 1; k < expresion.Length; k++)
                     {
                         if (expresion[k] == '*')
@@ -212,11 +219,34 @@ namespace Calculadora_Segundo_Parcial
                             expresion = expresion.Replace(Val1.ToString() + "/" + Val2.ToString(), Resultado.ToString());
                             return Resolver(expresion, 2);
                         }
+                        else if(expresion[k] == '!')
+                        {
+                            Val1 = Tomar_Izquierda(expresion.Substring(0, k));
+                            Resultado = Fact_Sigma((int)Val1, 1);
+                            expresion = expresion.Replace(Val1.ToString() + "!", Resultado.ToString());
+                            return Resolver(expresion, 2);
+                        }
+                        else if(expresion[k] == 'C')
+                        {
+                            Val1 = Tomar_Izquierda(expresion.Substring(0, k));
+                            Val2 = Tomar_Derecha(expresion.Substring(k + 1));
+                            Resultado = (Fact_Sigma((int)Val1, 1)) / (Fact_Sigma((int)Val2, 1) * Fact_Sigma((int)Val1 - (int)Val2, 1));
+                            expresion = expresion.Replace(Val1.ToString() + "C" + Val2.ToString(), Resultado.ToString());
+                            return Resolver(expresion, 2);
+                        }
+                        else if (expresion[k] == 'P')
+                        {
+                            Val1 = Tomar_Izquierda(expresion.Substring(0, k));
+                            Val2 = Tomar_Derecha(expresion.Substring(k + 1));
+                            Resultado = (Fact_Sigma((int)Val1, 1)) / (Fact_Sigma((int)Val1 - (int)Val2, 1));
+                            expresion = expresion.Replace(Val1.ToString() + "P" + Val2.ToString(), Resultado.ToString());
+                            return Resolver(expresion, 2);
+                        }
                     }
                     return Resolver(expresion, 1);
 
-                case 3:
-                    for (int k = 1; k < expresion.Length; k++)
+                case 3: //Jerarquia 3
+                    for (int k = 0; k < expresion.Length; k++)
                     {
                         if (expresion[k] == '^')
                         {
@@ -231,6 +261,80 @@ namespace Calculadora_Segundo_Parcial
                             Val2 = Tomar_Derecha(expresion.Substring(k + 1));
                             Resultado = Math.Sqrt(Val2);
                             expresion = expresion.Replace("√" + Val2.ToString(), Resultado.ToString());
+                            return Resolver(expresion, 3);
+                        }
+                        else if (expresion[k] == '³')
+                        {
+                            if (k < expresion.Length - 1)
+                            {
+                                if (expresion[k + 1] == '√')
+                                {
+                                    Val2 = Tomar_Derecha(expresion.Substring(k + 2));
+                                    Resultado = Math.Pow(Val2, (1.0 / 3.0));
+                                    expresion = expresion.Replace("³√" + Val2.ToString(), Resultado.ToString());
+                                    return Resolver(expresion, 3);
+                                }
+                                else
+                                {
+                                    Val1 = Tomar_Izquierda(expresion.Substring(0, k));
+                                    Resultado = Math.Pow(Val1, 3);
+                                    expresion = expresion.Replace(Val1.ToString() + "³", Resultado.ToString());
+                                    return Resolver(expresion, 3);
+                                }
+                            }
+                            else
+                            {
+                                Val1 = Tomar_Izquierda(expresion.Substring(0, k));
+                                Resultado = Math.Pow(Val1, 3);
+                                expresion = expresion.Replace(Val1.ToString() + "³", Resultado.ToString());
+                                return Resolver(expresion, 3);
+                            }
+
+                        }
+                        else if (expresion[k] == '²')
+                        {
+                            Val1 = Tomar_Izquierda(expresion.Substring(0, k));
+                            Resultado = Math.Pow(Val1, 2);
+                            expresion = expresion.Replace(Val1.ToString() + "²", Resultado.ToString());
+                            return Resolver(expresion, 3);
+                        }
+                        else if(expresion[k]== 'ˣ' && expresion[k+1] == '√')
+                        {
+                            Val1 = Tomar_Izquierda(expresion.Substring(0, k));
+                            Val2 = Tomar_Derecha(expresion.Substring(k + 2));
+                            Resultado = Math.Pow(Val2, (1.0 / Val1));
+                            expresion = expresion.Replace(Val1.ToString()+"ˣ√" + Val2.ToString(), Resultado.ToString());
+                            return Resolver(expresion, 3);
+                        }
+                        else if(expresion[k] == 'ˣ')
+                        {
+                            Val1 = Tomar_Izquierda(expresion.Substring(0, k));
+                            Val2 = Tomar_Derecha(expresion.Substring(k + 1));
+                            Resultado = Math.Pow(Val1, Val2);
+                            expresion = expresion.Replace(Val1.ToString()+"ˣ" + Val2.ToString(), Resultado.ToString());
+                            return Resolver(expresion, 3);
+                        }
+                        else if (expresion[k] == '⁻')
+                        {
+                            Val1 = Tomar_Izquierda(expresion.Substring(0, k));
+                            Resultado = 1.0 / Val1;
+                            expresion = expresion.Replace(Val1.ToString() + "⁻¹", Resultado.ToString());
+                            return Resolver(expresion, 3);
+                        }
+                        else if (expresion[k] == 'E')
+                        {
+                            Val1 = Tomar_Izquierda(expresion.Substring(0, k));
+                            Val2 = Tomar_Derecha(expresion.Substring(k + 1));
+                            Resultado = Val1*(Math.Pow(10, Val2));
+                            expresion = expresion.Replace(Val1.ToString() + "E" + Val2.ToString(), Resultado.ToString());
+                            return Resolver(expresion, 3);
+                        }
+                        else if(expresion[k] == '%')
+                        {
+                            Val1 = Tomar_Izquierda(expresion.Substring(0, k));
+                            Val2 = Tomar_Derecha(expresion.Substring(k + 1));
+                            Resultado = Val1 % Val2;
+                            expresion = expresion.Replace(Val1.ToString() + "%" + Val2.ToString(), Resultado.ToString());
                             return Resolver(expresion, 3);
                         }
                     }
@@ -294,8 +398,8 @@ namespace Calculadora_Segundo_Parcial
 
         public int Fact_Sigma(int n, int flag)
         {
-            if (n == 1)
-                return n;
+            if (n == 1 || n==0)
+                return 1;
             else
             {
                 if(flag==1)
