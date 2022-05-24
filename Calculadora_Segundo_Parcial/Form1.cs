@@ -15,44 +15,14 @@ namespace Calculadora_Segundo_Parcial
         public Form1()
         {
             InitializeComponent();
-
-            Suma.simbolo = "+";
-            Suma.jerarquia = 1;
-            Suma.lateralidal = 3;
-
-            Resta.simbolo = "-";
-            Resta.jerarquia = 1;
-            Resta.lateralidal = 3;
-
-            Multiplicacion.simbolo = "*";
-            Multiplicacion.jerarquia = 2;
-            Multiplicacion.lateralidal = 3;
-
-            Division.simbolo = "/";
-            Division.jerarquia = 2;
-            Division.lateralidal = 3;
         }
+
         bool SHIFT= false, HYP= false;
 
-        //Operadores clase y declaracion 
-        public class Operador
-        {
-            public string simbolo;
-            public int jerarquia;
-            public int lateralidal; // 1=unilateralidad izq  2=unilateralidad der  3=bilateralidad
-        }
-        public Operador Suma = new Operador();
-        public Operador Resta = new Operador();
-        public Operador Multiplicacion = new Operador();
-        public Operador Division = new Operador();
-        public Operador Potenciacion = new Operador();
-        public Operador Cubo = new Operador();
-        public Operador Cuadrado = new Operador();
-        public Operador RaizCuad = new Operador();
-        public Operador RaizCub = new Operador();
-        public Operador RaizX = new Operador();
-        public Operador Inversa = new Operador();
-        bool Is_Operador(char simbolo)
+        /* ###########################################################
+                             Funciones Sintaxis
+           ########################################################### */
+        bool Is_OperadorBas(char simbolo)
         {
             if (simbolo == '+')
                 return true;
@@ -70,7 +40,7 @@ namespace Calculadora_Segundo_Parcial
 
         bool Is_Number(char num)
         {
-            if (num == '1' || num == '2' || num == '3' || num == '4' || num == '5' || num == '6' || num == '7' || num == '8' || num == '9' || num == '0' || num == '0')
+            if (num == '1' || num == '2' || num == '3' || num == '4' || num == '5' || num == '6' || num == '7' || num == '8' || num == '9' || num == '0' || num == '.')
                 return true;
             else
                 return false;
@@ -89,7 +59,7 @@ namespace Calculadora_Segundo_Parcial
                 //Comprobar doble punto
                 if (expresion[i] == '.')
                     puntos++;
-                if (Is_Operador(expresion[i]))
+                if (Is_OperadorBas(expresion[i]))
                     puntos = 0;
                 if (puntos > 1)
                     return true;
@@ -97,14 +67,14 @@ namespace Calculadora_Segundo_Parcial
                 //Doble operador
                 if(i != (expresion.Length - 1))
                 {
-                    if (Is_Operador(expresion[i]) && Is_Operador(expresion[i + 1]))
+                    if (Is_OperadorBas(expresion[i]) && Is_OperadorBas(expresion[i + 1]))
                         return true;
                 }
 
                 //Factorial con operador
                 if((expresion[i]=='!' || expresion[i] == 'Σ') && i!=0)
                 {
-                    if (Is_Operador(expresion[i - 1]))
+                    if (Is_OperadorBas(expresion[i - 1]))
                         return true;
                 }
             }
@@ -147,34 +117,126 @@ namespace Calculadora_Segundo_Parcial
             return false;
         }
 
-        //Tomar derecha 
-        double TomarDerecha(string expresion)
+        /* ###########################################################
+                             Funciones Resolver
+           ########################################################### */
+
+        bool Is_Operador(char digito)
         {
-            bool Final= false;
-            int k= expresion.Length-3;
-            while (!Final && k>0)
-            {
-                if (Is_Operador(expresion[k]))
-                    Final = true;
-                else
-                    k--;
-            }
-            return Convert.ToDouble(expresion.Substring(k + 1));
+            if (digito == '+' || digito == '*' || digito == '/' || digito == '-')
+                return true;
+            else if (digito == '%' || digito == '^' || digito == '√' || digito == '√' || digito == '³' || digito == '²' || digito == '⁻')
+                return true;
+            else if (digito == 'a' || digito == 's' || digito == 'c' || digito == 't' || digito == 'h' || digito == 'n')
+                return true;
+            else if (digito == 'l' || digito == 'g' || digito == '!' || digito == 'Σ' || digito == '(' || digito == ')' || digito == 'E' || digito == 'P' || digito == 'C')
+                return true;
+            else
+                return false;
         }
 
-        //Tomar izq
-        double TomarIzq(string expresion)
+        //Tomar lados
+        double Tomar_Derecha(string expresion)
         {
-            bool Final = false;
             int k = 0;
-            while (!Final && k < expresion.Length)
+            while (!Is_Operador(expresion[k]) && k < expresion.Length - 1)
             {
-                if (Is_Operador(expresion[k]))
-                    Final = true;
-                else
-                    k++;
+                k++;
             }
-            return Convert.ToDouble(expresion.Substring(1, k));
+            if (k == expresion.Length - 1)
+                return Convert.ToDouble(expresion.Substring(0, k + 1));
+            else
+                return Convert.ToDouble(expresion.Substring(0, k));
+        }
+
+        double Tomar_Izquierda(string expresion)
+        {
+            int k = expresion.Length - 1;
+            while (!Is_Operador(expresion[k]) && k > 0)
+            {
+                k--;
+            }
+            if (k == 0)
+                return Convert.ToDouble(expresion);
+            else
+                return Convert.ToDouble(expresion.Substring(k + 1));
+        }
+
+        //Resolver
+        string Resolver(string expresion, int jerarquia)
+        {
+            double Val1, Val2, Resultado = 0;
+
+            switch (jerarquia)
+            {
+
+                case 1:
+                    for (int k = 1; k < expresion.Length; k++)
+                    {
+                        if (expresion[k] == '+')
+                        {
+                            Val1 = Tomar_Izquierda(expresion.Substring(0, k));
+                            Val2 = Tomar_Derecha(expresion.Substring(k + 1));
+                            Resultado = Val1 + Val2;
+                            expresion = expresion.Replace(Val1.ToString() + "+" + Val2.ToString(), Resultado.ToString());
+                            return Resolver(expresion, 1);
+                        }
+                        else if (expresion[k] == '-')
+                        {
+                            Val1 = Tomar_Izquierda(expresion.Substring(0, k));
+                            Val2 = Tomar_Derecha(expresion.Substring(k + 1));
+                            Resultado = Val1 - Val2;
+                            expresion = expresion.Replace(Val1.ToString() + "-" + Val2.ToString(), Resultado.ToString());
+                            return Resolver(expresion, 1);
+                        }
+
+                    }
+                    break;
+
+                case 2:
+                    for (int k = 1; k < expresion.Length; k++)
+                    {
+                        if (expresion[k] == '*')
+                        {
+                            Val1 = Tomar_Izquierda(expresion.Substring(0, k));
+                            Val2 = Tomar_Derecha(expresion.Substring(k + 1));
+                            Resultado = Val1 * Val2;
+                            expresion = expresion.Replace(Val1.ToString() + "*" + Val2.ToString(), Resultado.ToString());
+                            return Resolver(expresion, 2);
+                        }
+                        else if (expresion[k] == '/')
+                        {
+                            Val1 = Tomar_Izquierda(expresion.Substring(0, k));
+                            Val2 = Tomar_Derecha(expresion.Substring(k + 1));
+                            Resultado = Val1 / Val2;
+                            expresion = expresion.Replace(Val1.ToString() + "/" + Val2.ToString(), Resultado.ToString());
+                            return Resolver(expresion, 2);
+                        }
+                    }
+                    return Resolver(expresion, 1);
+
+                case 3:
+                    for (int k = 1; k < expresion.Length; k++)
+                    {
+                        if (expresion[k] == '^')
+                        {
+                            Val1 = Tomar_Izquierda(expresion.Substring(0, k));
+                            Val2 = Tomar_Derecha(expresion.Substring(k + 1));
+                            Resultado = Math.Pow(Val1, Val2);
+                            expresion = expresion.Replace(Val1.ToString() + "^" + Val2.ToString(), Resultado.ToString());
+                            return Resolver(expresion, 3);
+                        }
+                        else if (expresion[k] == '√')
+                        {
+                            Val2 = Tomar_Derecha(expresion.Substring(k + 1));
+                            Resultado = Math.Sqrt(Val2);
+                            expresion = expresion.Replace("√" + Val2.ToString(), Resultado.ToString());
+                            return Resolver(expresion, 3);
+                        }
+                    }
+                    return Resolver(expresion, 2);
+            }
+            return expresion;
         }
 
         //Entrar a los parentesis para resolver desde adentro
@@ -215,19 +277,21 @@ namespace Calculadora_Segundo_Parcial
                             parentesis--;
                     }
                 }
-                MessageBox.Show("Resolver( " + expresion + ")");
+                expresion = Resolver(expresion, 3);
                 return expresion;
             }
             else
             {
                 //Aquí se manda a resolver
-                MessageBox.Show("Resolver( " + expresion + ")");
+                expresion = Resolver(expresion, 3);
                 return expresion;
             }
                 
         }
+        /* ###########################################################
+                         Funcion sumatoria y factorial
+           ########################################################### */
 
-        //Sumatoria y factorial
         public int Fact_Sigma(int n, int flag)
         {
             if (n == 1)
@@ -238,6 +302,23 @@ namespace Calculadora_Segundo_Parcial
                    return n * Fact_Sigma(n - 1, flag);
                 else
                     return n + Fact_Sigma(n - 1, flag);
+            }
+        }
+
+        /* ###########################################################
+                             Funciones Botones
+           ########################################################### */
+
+        private void Igual_Click(object sender, EventArgs e)
+        {
+            if (Syntax_Check(PantallaEcuacion.Text))
+                PantallaEcuacion.Text = "Syntax Error";
+            else
+            {
+                if(PantallaEcuacion.Text.IndexOf('(')!=-1)
+                    PantallaResultados.Text = Entrar_parentesis(PantallaEcuacion.Text);
+                else
+                    PantallaResultados.Text = Resolver(PantallaEcuacion.Text, 3);
             }
         }
 
@@ -269,16 +350,6 @@ namespace Calculadora_Segundo_Parcial
         private void Modulo_Click(object sender, EventArgs e)
         {
             PantallaEcuacion.Text += "%";
-        }
-
-        private void Igual_Click(object sender, EventArgs e)
-        {
-            if (Syntax_Check(PantallaEcuacion.Text))
-                PantallaEcuacion.Text = "Syntax Error";
-            else
-            {
-                PantallaResultados.Text = Entrar_parentesis(PantallaEcuacion.Text);
-            }
         }
 
         private void Sumar_Click(object sender, EventArgs e)
