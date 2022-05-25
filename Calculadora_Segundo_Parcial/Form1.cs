@@ -339,6 +339,136 @@ namespace Calculadora_Segundo_Parcial
                         }
                     }
                     return Resolver(expresion, 2);
+
+                case 4: //jerarquia 4
+                    for(int k = 0; k < expresion.Length; k++)
+                    {
+                        if (expresion[k] == 'a')
+                        {
+                            if(expresion[k+3] == 's')
+                            {
+                                if (expresion[k + 6] == 'h')
+                                {
+                                    Val2 = Tomar_Derecha(expresion.Substring(k + 7));
+                                    Resultado = ((Math.Asin(Val2)) / Math.PI) * 180;
+                                    expresion = expresion.Replace("arcsenh" + Val2.ToString(), Resultado.ToString());
+                                    return Resolver(expresion, 4);
+                                }
+                                else
+                                {
+                                    Val2 = Tomar_Derecha(expresion.Substring(k + 6));
+                                    Resultado = ((Math.Asin(Val2)) / Math.PI) * 180;
+                                    expresion = expresion.Replace("arcsen" + Val2.ToString(), Resultado.ToString());
+                                    return Resolver(expresion, 4);
+                                }
+                            }
+                            else if (expresion[k + 3] == 'c')
+                            {
+                                if (expresion[k + 6] == 'h')
+                                {
+                                    Val2 = Tomar_Derecha(expresion.Substring(k + 7));
+                                    Resultado = ((Math.Acos(Val2)) / Math.PI) * 180;
+                                    expresion = expresion.Replace("arccosh" + Val2.ToString(), Resultado.ToString());
+                                    return Resolver(expresion, 4);
+                                }
+                                else
+                                {
+                                    Val2 = Tomar_Derecha(expresion.Substring(k + 6));
+                                    Resultado = ((Math.Acos(Val2))/Math.PI)*180;
+                                    expresion = expresion.Replace("arccos" + Val2.ToString(), Resultado.ToString());
+                                    return Resolver(expresion, 4);
+                                }
+                            }
+                            else if (expresion[k + 3] == 't')
+                            {
+                                if (expresion[k + 4] == 'h')
+                                {
+                                    Val2 = Tomar_Derecha(expresion.Substring(k + 7));
+                                    Resultado = ((Math.Atan(Val2)) / Math.PI) * 180;
+                                    expresion = expresion.Replace("arctanh" + Val2.ToString(), Resultado.ToString());
+                                    return Resolver(expresion, 4);
+                                }
+                                else
+                                {
+                                    Val2 = Tomar_Derecha(expresion.Substring(k + 6));
+                                    Resultado = ((Math.Atan(Val2)) / Math.PI) * 180;
+                                    expresion = expresion.Replace("arctan" + Val2.ToString(), Resultado.ToString());
+                                    return Resolver(expresion, 4);
+                                }
+                            }
+                        }
+                        else if (expresion[k] == 's')
+                        {
+                            if (expresion[k + 3] == 'h')
+                            {
+                                Val2 = Tomar_Derecha(expresion.Substring(k + 4));
+                                Resultado = Math.Sinh((Val2 * Math.PI) / 180);
+                                expresion = expresion.Replace("senh" + Val2.ToString(), Resultado.ToString());
+                                return Resolver(expresion, 4);
+                            }
+                            else
+                            {
+                                Val2 = Tomar_Derecha(expresion.Substring(k + 3));
+                                Resultado = Math.Sin((Val2*Math.PI)/180);
+                                expresion = expresion.Replace("sen" + Val2.ToString(), Resultado.ToString());
+                                return Resolver(expresion, 4);
+                            }
+                        }
+                        else if (expresion[k] == 'c')
+                        {
+                            if (expresion[k + 3] == 'h')
+                            {
+                                Val2 = Tomar_Derecha(expresion.Substring(k + 4));
+                                Resultado = Math.Cosh((Val2 * Math.PI) / 180);
+                                expresion = expresion.Replace("cosh" + Val2.ToString(), Resultado.ToString());
+                                return Resolver(expresion, 4);
+                            }
+                            else
+                            {
+                                Val2 = Tomar_Derecha(expresion.Substring(k + 3));
+                                Resultado = Math.Cos((Val2 * Math.PI) / 180);
+                                MessageBox.Show(Resultado.ToString());
+                                expresion = expresion.Replace("cos" + Val2.ToString(), Resultado.ToString());
+                                return Resolver(expresion, 4);
+                            }
+                        }
+                        else if (expresion[k] == 't')
+                        {
+                            if (expresion[k + 3] == 'h')
+                            {
+                                Val2 = Tomar_Derecha(expresion.Substring(k + 4));
+                                Resultado = Math.Tanh((Val2 * Math.PI) / 180);
+                                expresion = expresion.Replace("tanh" + Val2.ToString(), Resultado.ToString());
+                                return Resolver(expresion, 4);
+                            }
+                            else
+                            {
+                                Val2 = Tomar_Derecha(expresion.Substring(k + 3));
+                                Resultado = Math.Tan((Val2 * Math.PI) / 180);
+                                expresion = expresion.Replace("tan" + Val2.ToString(), Resultado.ToString());
+                                return Resolver(expresion, 4);
+                            }
+                        }
+                        else if (expresion[k] == 'l')
+                        {
+                            if (expresion[k + 1] == 'n')
+                            {
+                                Val2 = Tomar_Derecha(expresion.Substring(k + 2));
+                                Resultado = Math.Log(Val2);
+                                expresion = expresion.Replace("ln" + Val2.ToString(), Resultado.ToString());
+                                return Resolver(expresion, 4);
+                            }
+                            else
+                            {
+                                Val2 = Tomar_Derecha(expresion.Substring(k + 3));
+                                Resultado = Math.Log10(Val2);
+                                expresion = expresion.Replace("log" + Val2.ToString(), Resultado.ToString());
+                                return Resolver(expresion, 4);
+                            }
+                        }
+                    }
+                    return Resolver(expresion, 3);
+
             }
             return expresion;
         }
@@ -422,7 +552,7 @@ namespace Calculadora_Segundo_Parcial
                 if(PantallaEcuacion.Text.IndexOf('(')!=-1)
                     PantallaResultados.Text = Entrar_parentesis(PantallaEcuacion.Text);
                 else
-                    PantallaResultados.Text = Resolver(PantallaEcuacion.Text, 3);
+                    PantallaResultados.Text = Resolver(PantallaEcuacion.Text, 4);
             }
         }
 
