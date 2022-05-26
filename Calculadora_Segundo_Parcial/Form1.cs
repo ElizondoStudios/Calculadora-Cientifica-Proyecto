@@ -16,7 +16,6 @@ namespace Calculadora_Segundo_Parcial
         {
             InitializeComponent();
         }
-
         bool SHIFT= false, HYP= false;
 
         /* ###########################################################
@@ -350,16 +349,14 @@ namespace Calculadora_Segundo_Parcial
                                 if (expresion[k + 6] == 'h')
                                 {
                                     Val2 = Tomar_Derecha(expresion.Substring(k + 7));
-                                    Val2 = (Val2 * Math.PI) / 180;
-                                    Resultado=MathF.Asinh(Val2);
+                                    Resultado=Math.Asin((Val2 * Math.PI) / 180);
                                     expresion = expresion.Replace("arcsenh" + Val2.ToString(), Resultado.ToString());
                                     return Resolver(expresion, 4);
                                 }
                                 else
                                 {
                                     Val2 = Tomar_Derecha(expresion.Substring(k + 6));
-                                    Val2 = (Val2 * Math.PI) / 180;
-                                    Resultado=Math.Asin(Val2);
+                                    Resultado=Math.Asin((Val2 * Math.PI) / 180);
                                     expresion = expresion.Replace("arcsen" + Val2.ToString(), Resultado.ToString());
                                     return Resolver(expresion, 4);
                                 }
@@ -369,16 +366,14 @@ namespace Calculadora_Segundo_Parcial
                                 if (expresion[k + 6] == 'h')
                                 {
                                     Val2 = Tomar_Derecha(expresion.Substring(k + 7));
-                                    Val2 = (Val2 * Math.PI) / 180;
-                                    Resultado=MathF.Acosh(Val2);
+                                    Resultado=Math.Acos((Val2 * Math.PI) / 180);
                                     expresion = expresion.Replace("arccosh" + Val2.ToString(), Resultado.ToString());
                                     return Resolver(expresion, 4);
                                 }
                                 else
                                 {
                                     Val2 = Tomar_Derecha(expresion.Substring(k + 6));
-                                    Val2 = (Val2 * Math.PI) / 180;
-                                    Resultado=Math.Acos(Val2);
+                                    Resultado=Math.Acos((Val2 * Math.PI) / 180);
                                     expresion = expresion.Replace("arccos" + Val2.ToString(), Resultado.ToString());
                                     return Resolver(expresion, 4);
                                 }
@@ -388,16 +383,14 @@ namespace Calculadora_Segundo_Parcial
                                 if (expresion[k + 4] == 'h')
                                 {
                                     Val2 = Tomar_Derecha(expresion.Substring(k + 7));
-                                    Val2 = (Val2 * Math.PI) / 180;
-                                    Resultado=MathF.Atanh(Val2);
+                                    Resultado=Math.Atan((Val2 * Math.PI) / 180);
                                     expresion = expresion.Replace("arctanh" + Val2.ToString(), Resultado.ToString());
                                     return Resolver(expresion, 4);
                                 }
                                 else
                                 {
                                     Val2 = Tomar_Derecha(expresion.Substring(k + 6));
-                                    Val2 = (Val2 * Math.PI) / 180;
-                                    Resultado=Math.Atan(Val2);
+                                    Resultado=Math.Atan((Val2 * Math.PI) / 180);
                                     expresion = expresion.Replace("arctan" + Val2.ToString(), Resultado.ToString());
                                     return Resolver(expresion, 4);
                                 }
@@ -408,16 +401,14 @@ namespace Calculadora_Segundo_Parcial
                             if (expresion[k + 3] == 'h')
                             {
                                 Val2 = Tomar_Derecha(expresion.Substring(k + 4));
-                                Val2 = (Val2 * Math.PI) / 180;
-                                Resultado=Math.Sinh(Val2);
+                                Resultado=Math.Sinh((Val2 * Math.PI) / 180);
                                 expresion = expresion.Replace("senh" + Val2.ToString(), Resultado.ToString());
                                 return Resolver(expresion, 4);
                             }
                             else
                             {
                                 Val2 = Tomar_Derecha(expresion.Substring(k + 3));
-                                Val2 = (Val2 * Math.PI) / 180;
-                                Resultado=Math.Sin(Val2);
+                                Resultado=Math.Sin((Val2 * Math.PI) / 180);
                                 expresion = expresion.Replace("sen" + Val2.ToString(), Resultado.ToString());
                                 return Resolver(expresion, 4);
                             }
@@ -427,17 +418,15 @@ namespace Calculadora_Segundo_Parcial
                             if (expresion[k + 3] == 'h')
                             {
                                 Val2 = Tomar_Derecha(expresion.Substring(k + 4));
-                                Val2 = (Val2 * Math.PI) / 180;
-                                Resultado=Math.Cosh(Val2);
+                                Resultado=Math.Cosh((Val2 * Math.PI) / 180);
                                 expresion = expresion.Replace("cosh" + Val2.ToString(), Resultado.ToString());
                                 return Resolver(expresion, 4);
                             }
                             else
                             {
                                 Val2 = Tomar_Derecha(expresion.Substring(k + 3));
-                                Val2 = (Val2 * Math.PI) / 180;
-                                Resultado=Math.Cos(Val2);
-                                MessageBox.Show(Resultado.ToString());
+                                MessageBox.Show(Val2.ToString());
+                                Resultado =Math.Cos((Val2 * Math.PI) / 180);
                                 expresion = expresion.Replace("cos" + Val2.ToString(), Resultado.ToString());
                                 return Resolver(expresion, 4);
                             }
@@ -447,16 +436,14 @@ namespace Calculadora_Segundo_Parcial
                             if (expresion[k + 3] == 'h')
                             {
                                 Val2 = Tomar_Derecha(expresion.Substring(k + 4));
-                                Val2 = (Val2 * Math.PI) / 180;
-                                Resultado=Math.Tanh(Val2);
+                                Resultado=Math.Tanh((Val2 * Math.PI) / 180);
                                 expresion = expresion.Replace("tanh" + Val2.ToString(), Resultado.ToString());
                                 return Resolver(expresion, 4);
                             }
                             else
                             {
                                 Val2 = Tomar_Derecha(expresion.Substring(k + 3));
-                                Val2 = (Val2 * Math.PI) / 180;
-                                Resultado=Math.Tan(Val2);
+                                Resultado=Math.Tan((Val2 * Math.PI) / 180);
                                 expresion = expresion.Replace("tan" + Val2.ToString(), Resultado.ToString());
                                 return Resolver(expresion, 4);
                             }
