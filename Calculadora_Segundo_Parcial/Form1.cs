@@ -10,6 +10,13 @@ using System.Windows.Forms;
 
 namespace Calculadora_Segundo_Parcial
 {
+    /*
+     To do:
+        -Resolver errores de sintaxis
+        -Pasar el resultado a la pantalla de ecuacion
+        -Resolver longitud en la pantalla de ecuacion 
+        -Implementar lo de tuli 
+     */
     public partial class Form1 : Form
     {
         public Form1()
@@ -138,14 +145,30 @@ namespace Calculadora_Segundo_Parcial
         double Tomar_Derecha(string expresion)
         {
             int k = 0;
-            while (!Is_Operador(expresion[k]) && k < expresion.Length - 1)
+            if (expresion[k] == '-')
             {
                 k++;
+                while (!Is_Operador(expresion[k]) && k < expresion.Length - 1)
+                {
+                    k++;
+                }
+
+                if (k == expresion.Length - 1)
+                    return Convert.ToDouble(expresion.Substring(1, k))*(-1.0);
+                else
+                    return Convert.ToDouble(expresion.Substring(1, k-1))*(-1.0);
             }
-            if (k == expresion.Length - 1)
-                return Convert.ToDouble(expresion.Substring(0, k + 1));
             else
-                return Convert.ToDouble(expresion.Substring(0, k));
+            {
+                while (!Is_Operador(expresion[k]) && k < expresion.Length - 1)
+                {
+                    k++;
+                }
+                if (k == expresion.Length - 1)
+                    return Convert.ToDouble(expresion.Substring(0, k + 1));
+                else
+                    return Convert.ToDouble(expresion.Substring(0, k));
+            }
         }
 
         double Tomar_Izquierda(string expresion)
@@ -158,14 +181,19 @@ namespace Calculadora_Segundo_Parcial
             if (k == 0)
                 return Convert.ToDouble(expresion);
             else
-                return Convert.ToDouble(expresion.Substring(k + 1));
+            {
+                if (expresion[k-1]=='-')
+                    return Convert.ToDouble(expresion.Substring(k))*(-1.0);
+                else
+                    return Convert.ToDouble(expresion.Substring(k + 1));
+            }
+                
         }
 
         //Resolver
         string Resolver(string expresion, int jerarquia)
         {
             double Val1, Val2, Resultado = 0;
-
             switch (jerarquia)
             {
                 
@@ -349,7 +377,7 @@ namespace Calculadora_Segundo_Parcial
                                 if (expresion[k + 6] == 'h')
                                 {
                                     Val2 = Tomar_Derecha(expresion.Substring(k + 7));
-                                    Resultado=Math.Asin((Val2 * Math.PI) / 180);
+                                    Resultado=Math.Asin((Val2 * Math.PI) / 180);  //Reemplazar por Asinh
                                     expresion = expresion.Replace("arcsenh" + Val2.ToString(), Resultado.ToString());
                                     return Resolver(expresion, 4);
                                 }
@@ -366,7 +394,7 @@ namespace Calculadora_Segundo_Parcial
                                 if (expresion[k + 6] == 'h')
                                 {
                                     Val2 = Tomar_Derecha(expresion.Substring(k + 7));
-                                    Resultado=Math.Acos((Val2 * Math.PI) / 180);
+                                    Resultado=Math.Acos((Val2 * Math.PI) / 180);  //Reemplazar por Acosh
                                     expresion = expresion.Replace("arccosh" + Val2.ToString(), Resultado.ToString());
                                     return Resolver(expresion, 4);
                                 }
@@ -383,7 +411,7 @@ namespace Calculadora_Segundo_Parcial
                                 if (expresion[k + 4] == 'h')
                                 {
                                     Val2 = Tomar_Derecha(expresion.Substring(k + 7));
-                                    Resultado=Math.Atan((Val2 * Math.PI) / 180);
+                                    Resultado=Math.Atan((Val2 * Math.PI) / 180); //Reemplazar por Atanh
                                     expresion = expresion.Replace("arctanh" + Val2.ToString(), Resultado.ToString());
                                     return Resolver(expresion, 4);
                                 }
@@ -425,7 +453,6 @@ namespace Calculadora_Segundo_Parcial
                             else
                             {
                                 Val2 = Tomar_Derecha(expresion.Substring(k + 3));
-                                MessageBox.Show(Val2.ToString());
                                 Resultado =Math.Cos((Val2 * Math.PI) / 180);
                                 expresion = expresion.Replace("cos" + Val2.ToString(), Resultado.ToString());
                                 return Resolver(expresion, 4);
@@ -509,13 +536,13 @@ namespace Calculadora_Segundo_Parcial
                             parentesis--;
                     }
                 }
-                expresion = Resolver(expresion, 3);
+                expresion = Resolver(expresion, 4);
                 return expresion;
             }
             else
             {
                 //Aquí se manda a resolver
-                expresion = Resolver(expresion, 3);
+                expresion = Resolver(expresion, 4);
                 return expresion;
             }
                 
