@@ -10,11 +10,7 @@ using System.Windows.Forms;
 
 namespace Calculadora_Segundo_Parcial
 {
-    /*
-     To do:
-        -Resolver errores de sintaxis (Menor jerarquia antes de mayor)
-        -Resolver longitud en la pantalla de ecuacion 🥺
-     */
+
     public partial class Form1 : Form
     {
         public Form1()
@@ -122,10 +118,75 @@ namespace Calculadora_Segundo_Parcial
             //Triple menos
             if (expresion.IndexOf("---") >= 0)
                 return true;
+            //Operador de menor jerarquia antes de mayor
+            char[] opJer4 = new char[] {'s','c','t','a','l'};
+            char[] opJer3 = new char[] {'^', '%','³', '√', 'ˣ', '²', '⁻' };
+            char[] opJer2 = new char[] {'*','/','!'};
+            char[] opJer1 = new char[] {'+','-', 'Σ' };
+
+            for (int i = 2; i < expresion.Length; i++)
+            {
+                foreach(char a in opJer4)
+                {
+                    foreach (char b in opJer3)
+                    {
+                        if (expresion[i] == a && expresion[i - 1] == b)
+                            return true;
+                    }
+
+                    foreach (char b in opJer2)
+                    {
+                        if (expresion[i] == a && expresion[i - 1] == b)
+                            return true;
+                    }
+
+                    foreach (char b in opJer1)
+                    {
+                        if (expresion[i] == a && expresion[i - 1] == b)
+                            return true;
+                    }
+                }
+
+                foreach (char a in opJer3)
+                {
+                    foreach (char b in opJer2)
+                    {
+                        if (expresion[i] == a && expresion[i - 1] == b)
+                            return true;
+                    }
+
+                    foreach (char b in opJer1)
+                    {
+                        if (expresion[i] == a && expresion[i - 1] == b)
+                            return true;
+                    }
+                }
+
+                foreach (char a in opJer2)
+                {
+                    foreach (char b in opJer1)
+                    {
+                        if (expresion[i] == a && expresion[i - 1] == b)
+                            return true;
+                    }
+                }
+            }
+            //Empieza con operador
+            char[] opIniciales = new char[] { '^', '%','ˣ', '²', '⁻' , 'Σ', '!', '*', '/', '+', '-' };
+            foreach(char a in opIniciales)
+            {
+                if (expresion.StartsWith(a.ToString()))
+                    return true;
+            }
+
+            if (expresion.StartsWith("³") && expresion[1] != '√')
+                return true;
+
 
             //Sin error
             return false;
         }
+
         /* ###########################################################
                               Función Intérpetre
            ########################################################### */
@@ -865,51 +926,61 @@ namespace Calculadora_Segundo_Parcial
 
         private void Punto_Click(object sender, EventArgs e)
         {
+            BorrarPantallas();
             PantallaEcuacion.Text += ".";
         }
 
         private void Cero_Click(object sender, EventArgs e)
         {
+            BorrarPantallas();
             PantallaEcuacion.Text += "0";
         }
 
         private void Tres_Click(object sender, EventArgs e)
         {
+            BorrarPantallas();
             PantallaEcuacion.Text += "3";
         }
 
         private void Dos_Click(object sender, EventArgs e)
         {
+            BorrarPantallas();
             PantallaEcuacion.Text += "2";
         }
 
         private void Uno_Click(object sender, EventArgs e)
         {
+            BorrarPantallas();
             PantallaEcuacion.Text += "1";
         }
 
         private void Seis_Click(object sender, EventArgs e)
         {
+            BorrarPantallas();
             PantallaEcuacion.Text += "6";
         }
 
         private void Cinco_Click(object sender, EventArgs e)
         {
+            BorrarPantallas();
             PantallaEcuacion.Text += "5";
         }
 
         private void Cuatro_Click(object sender, EventArgs e)
         {
+            BorrarPantallas();
             PantallaEcuacion.Text += "4";
         }
 
         private void Nueve_Click(object sender, EventArgs e)
         {
+            BorrarPantallas();
             PantallaEcuacion.Text += "9";
         }
 
         private void Ocho_Click(object sender, EventArgs e)
         {
+            BorrarPantallas();
             PantallaEcuacion.Text += "8";
         }
 
@@ -1105,12 +1176,13 @@ namespace Calculadora_Segundo_Parcial
 
         private void button1_Click_1(object sender, EventArgs e)
         {
+            BorrarPantallas();
             PantallaEcuacion.Text += answer;
         }
 
         private void PantallaEcuacion_TextChanged(object sender, EventArgs e)
         {
-            PantallaEcuacion.ScrollToCaret();
+
         }
 
         private void MC_Click(object sender, EventArgs e)
@@ -1134,6 +1206,7 @@ namespace Calculadora_Segundo_Parcial
 
         private void Siete_Click(object sender, EventArgs e)
         {
+            BorrarPantallas();
             PantallaEcuacion.Text += "7";
         }
     }
