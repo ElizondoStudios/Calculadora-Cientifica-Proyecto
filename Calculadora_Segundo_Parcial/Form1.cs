@@ -334,6 +334,21 @@ namespace Calculadora_Segundo_Parcial
                              Funciones Resolver
            ########################################################### */
 
+        double Asinh(double x)
+        {
+            x=Math.Log(x + Math.Sqrt(x * x + 1));
+            return x;
+        }
+        double Acosh(double x)
+        {
+            x = Math.Log(x + Math.Sqrt(x * x - 1));
+            return x;
+        }
+        double Atanh(double x)
+        {
+            x=(Math.Log((1+x)/(1-x)))/2;
+            return x;
+        }
         bool Is_Operador(char digito)
         {
             if (digito == '+' || digito == '*' || digito == '/' || digito == '-')
@@ -584,7 +599,7 @@ namespace Calculadora_Segundo_Parcial
                                 if (expresion[k + 6] == 'h')
                                 {
                                     Val2 = Tomar_Derecha(expresion.Substring(k + 7));
-                                    Resultado=Math.Asin((Val2 * Math.PI) / 180);  //Reemplazar por Asinh
+                                    Resultado = Asinh(Val2);
                                     expresion = expresion.Replace("arcsenh" + Val2.ToString(), Resultado.ToString());
                                     return Resolver(expresion, 4);
                                 }
@@ -601,7 +616,7 @@ namespace Calculadora_Segundo_Parcial
                                 if (expresion[k + 6] == 'h')
                                 {
                                     Val2 = Tomar_Derecha(expresion.Substring(k + 7));
-                                    Resultado=Math.Acos((Val2 * Math.PI) / 180);  //Reemplazar por Acosh
+                                    Resultado = Acosh(Val2);
                                     expresion = expresion.Replace("arccosh" + Val2.ToString(), Resultado.ToString());
                                     return Resolver(expresion, 4);
                                 }
@@ -615,10 +630,10 @@ namespace Calculadora_Segundo_Parcial
                             }
                             else if (expresion[k + 3] == 't')
                             {
-                                if (expresion[k + 4] == 'h')
+                                if (expresion[k + 6] == 'h')
                                 {
                                     Val2 = Tomar_Derecha(expresion.Substring(k + 7));
-                                    Resultado=Math.Atan((Val2 * Math.PI) / 180); //Reemplazar por Atanh
+                                    Resultado = Atanh(Val2);
                                     expresion = expresion.Replace("arctanh" + Val2.ToString(), Resultado.ToString());
                                     return Resolver(expresion, 4);
                                 }
@@ -989,7 +1004,7 @@ namespace Calculadora_Segundo_Parcial
             BorrarPantallas();
             if (SHIFT && HYP)
             {
-                PantallaEcuacion.Text += "arsenh";
+                PantallaEcuacion.Text += "arcsenh";
                 SHIFT = HYP = false;
                 PantallaShift.Text = PantallaHyp.Text = "";
             }
@@ -1014,7 +1029,7 @@ namespace Calculadora_Segundo_Parcial
             BorrarPantallas();
             if (SHIFT && HYP)
             {
-                PantallaEcuacion.Text += "arcosh";
+                PantallaEcuacion.Text += "arccosh";
                 SHIFT = HYP = false;
                 PantallaShift.Text = PantallaHyp.Text = "";
             }
@@ -1039,7 +1054,7 @@ namespace Calculadora_Segundo_Parcial
             BorrarPantallas();
             if (SHIFT && HYP)
             {
-                PantallaEcuacion.Text += "artanh";
+                PantallaEcuacion.Text += "arctanh";
                 SHIFT = HYP = false;
                 PantallaShift.Text = PantallaHyp.Text = "";
             }
