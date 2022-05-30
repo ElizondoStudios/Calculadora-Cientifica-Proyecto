@@ -12,10 +12,8 @@ namespace Calculadora_Segundo_Parcial
 {
     /*
      To do:
-        -Resolver errores de sintaxis
-        -Pasar el resultado a la pantalla de ecuacion
-        -Resolver longitud en la pantalla de ecuacion 
-        -Implementar lo de tuli 
+        -Resolver errores de sintaxis (Menor jerarquia antes de mayor)
+        -Resolver longitud en la pantalla de ecuacion 🥺
      */
     public partial class Form1 : Form
     {
@@ -25,6 +23,7 @@ namespace Calculadora_Segundo_Parcial
         }
         bool SHIFT= false, HYP= false;
         const double PI = Math.PI, E = Math.E;
+        string answer;
 
         /* ###########################################################
                              Funciones Sintaxis
@@ -120,6 +119,10 @@ namespace Calculadora_Segundo_Parcial
                     return true;
             }
 
+            //Triple menos
+            if (expresion.IndexOf("---") >= 0)
+                return true;
+
             //Sin error
             return false;
         }
@@ -128,44 +131,65 @@ namespace Calculadora_Segundo_Parcial
            ########################################################### */
         string Interpreter(string expresion)
         {
+            //Empieza con punto
+            if (expresion[0]=='.')
+                expresion = expresion.Insert(0, "0");
+
             for (int i = 0; i < expresion.Length; i++)
             {
+                //E
                 if (expresion[i] == 'e')
                 {
-                    if (i != 0 && i < expresion.Length - 1)
+                    if (i > 0)
                     {
-                        if (Is_Number(expresion[i - 1]) && Is_Number(expresion[i + 1]))
+                        if (expresion[i - 1] != 's')
                         {
-                            expresion = expresion.Insert(i + 1, "" + E.ToString() + "");
+                            if (i != 0 && i < expresion.Length - 1)
+                            {
+                                if (Is_Number(expresion[i - 1]) && Is_Number(expresion[i + 1]))
+                                {
+                                    expresion = expresion.Insert(i + 1, "" + E.ToString() + "");
+                                }
+                                else if (Is_Number(expresion[i - 1]))
+                                {
+                                    expresion = expresion.Insert(i + 1, "*" + E.ToString());
+                                }
+                                else if (Is_Number(expresion[i + 1]))
+                                {
+                                    expresion = expresion.Insert(i + 1, E.ToString() + "*");
+                                }
+                                else
+                                {
+                                    expresion = expresion.Insert(i + 1, E.ToString());
+                                }
+                            }
+                            else if (i == expresion.Length - 1 && expresion.Length > 1 && Is_Number(expresion[i - 1])) // "e" se encuentra al final de la expresion
+                            {
+                                expresion = expresion.Insert(i + 1, "*" + E.ToString());
+                            }
+                            else if (i == 0 && expresion.Length > 1 && Is_Number(expresion[i + 1])) // "e" se encuentra al inicio de la expresion
+                            {
+                                expresion = expresion.Insert(i + 1, E.ToString() + "*");
+                            }
+                            else            //e no tiene números al lado
+                            {
+                                expresion = expresion.Insert(i + 1, E.ToString());
+                            }
+                            expresion = expresion.Remove(i, 1);
                         }
-                        else if (Is_Number(expresion[i - 1]))
-                        {
-                            expresion = expresion.Insert(i + 1, "*" + E.ToString());
-                        }
-                        else if (Is_Number(expresion[i + 1]))
-                        {
+                    }
+                    else
+                    {
+                        if (Is_Number(expresion[i+1]))
                             expresion = expresion.Insert(i + 1, E.ToString() + "*");
-                        }
                         else
-                        {
                             expresion = expresion.Insert(i + 1, E.ToString());
-                        }
+                        expresion = expresion.Remove(i, 1);
                     }
-                    else if (i == expresion.Length - 1 && expresion.Length > 1 && Is_Number(expresion[i - 1])) // "e" se encuentra al final de la expresion
-                    {
-                        expresion = expresion.Insert(i + 1, "*" + E.ToString());
-                    }
-                    else if (i == 0 && expresion.Length > 1 && Is_Number(expresion[i + 1])) // "e" se encuentra al inicio de la expresion
-                    {
-                        expresion = expresion.Insert(i + 1, E.ToString() + "*");
-                    }
-                    else            //e no tiene números al lado
-                    {
-                        expresion = expresion.Insert(i + 1, E.ToString());
-                    }
-                    expresion = expresion.Remove(i, 1);
                 }
-                if (expresion[i] == 'π')
+
+                //Pi
+                else if (expresion[i] == 'π')
                 {
                     if (i != 0 && i < expresion.Length - 1)
                     {
@@ -201,7 +225,8 @@ namespace Calculadora_Segundo_Parcial
                     expresion = expresion.Remove(i, 1);
                 }
 
-                if (expresion[i] == '(')//si encuentro un paréntesis
+                //Parentesis
+                else if (expresion[i] == '(')//si encuentro un paréntesis
                 {
                     int pos = i;
                     if (i != 0)
@@ -225,13 +250,21 @@ namespace Calculadora_Segundo_Parcial
                             expresion = expresion.Insert(pos + 1, "*");
                         }
                 }
-                if (expresion[i] == 'a' || expresion[i] == 'l' || expresion[i] == 's' || expresion[i] == 'c'
-                    || expresion[i] == 't' && i != 0)
+
+                //Trig y log
+                else if (expresion[i] == 'a' || expresion[i] == 'l' || expresion[i] == 's' || expresion[i] == 'c' || expresion[i] == 't')
                 {
-                    if (Is_Number(expresion[i - 1]))
+                    if (i > 0)
                     {
-                        expresion = expresion.Insert(i, "*");
+                        if (Is_Number(expresion[i - 1]))
+                        {
+                            expresion = expresion.Insert(i, "*");
+                        }
                     }
+                }
+                else if(expresion[i] == '.' && !Is_Number(expresion[i - 1]))
+                {
+                    expresion = expresion.Insert(i, "0");
                 }
             }
             return expresion;
@@ -676,7 +709,26 @@ namespace Calculadora_Segundo_Parcial
                     return n + Fact_Sigma(n - 1, flag);
             }
         }
+        /* ###########################################################
+                             Funciones Pantallas
+           ########################################################### */
+        void PasarResultado()
+        {
+            if (PantallaResultados.Text != "")
+            {
+                PantallaEcuacion.Text = PantallaResultados.Text;
+                PantallaResultados.Clear();
+            }
+        }
 
+        void BorrarPantallas()
+        {
+            if (PantallaResultados.Text != "")
+            {
+                PantallaResultados.Clear();
+                PantallaEcuacion.Clear();
+            }
+        }
         /* ###########################################################
                              Funciones Botones
            ########################################################### */
@@ -689,17 +741,21 @@ namespace Calculadora_Segundo_Parcial
             {
                 if (PantallaEcuacion.Text.IndexOf('(') != -1)
                     PantallaResultados.Text = Entrar_parentesis(Interpreter(PantallaEcuacion.Text));
-                /*else if(PantallaEcuacion.Text.IndexOf('a') != -1 || PantallaEcuacion.Text.IndexOf('s') != -1 || PantallaEcuacion.Text.IndexOf('c') != -1 || PantallaEcuacion.Text.IndexOf('t') != -1)
+                else if(PantallaEcuacion.Text.IndexOf('a') != -1 || PantallaEcuacion.Text.IndexOf('s') != -1 || PantallaEcuacion.Text.IndexOf('c') != -1 || PantallaEcuacion.Text.IndexOf('t') != -1)
                     PantallaResultados.Text = Resolver(Interpreter(PantallaEcuacion.Text), 4);
                 else if(PantallaEcuacion.Text.IndexOf('l') != -1 || PantallaEcuacion.Text.IndexOf('e') != -1 || PantallaEcuacion.Text.IndexOf('π') != -1)
-                    PantallaResultados.Text = Resolver(Interpreter(PantallaEcuacion.Text), 4);*/
+                    PantallaResultados.Text = Resolver(Interpreter(PantallaEcuacion.Text), 4);
+                else if(PantallaEcuacion.Text.IndexOf('.') != -1)
+                    PantallaResultados.Text = Resolver(Interpreter(PantallaEcuacion.Text), 4);
                 else
                     PantallaResultados.Text = Resolver(PantallaEcuacion.Text, 4);
+                answer = PantallaResultados.Text;
             }
         }
 
         private void Factorial_Click(object sender, EventArgs e)
         {
+            PasarResultado();
             if (SHIFT)
             {
                 PantallaEcuacion.Text += "C";
@@ -712,6 +768,7 @@ namespace Calculadora_Segundo_Parcial
 
         private void Sumatoria_Click(object sender, EventArgs e)
         {
+            PasarResultado();
             if (SHIFT)
             {
                 PantallaEcuacion.Text += "P";
@@ -725,26 +782,31 @@ namespace Calculadora_Segundo_Parcial
 
         private void Modulo_Click(object sender, EventArgs e)
         {
+            PasarResultado();
             PantallaEcuacion.Text += "%";
         }
 
         private void Sumar_Click(object sender, EventArgs e)
         {
+            PasarResultado();
             PantallaEcuacion.Text += "+";
         }
 
         private void Multiplicar_Click(object sender, EventArgs e)
         {
+            PasarResultado();
             PantallaEcuacion.Text += "*";
         }
 
         private void Restar_Click(object sender, EventArgs e)
         {
+            PasarResultado();
             PantallaEcuacion.Text += "-";
         }
 
         private void Dividir_Click(object sender, EventArgs e)
         {
+            PasarResultado();
             PantallaEcuacion.Text += "/";
         }
 
@@ -853,6 +915,7 @@ namespace Calculadora_Segundo_Parcial
 
         private void Seno_Click(object sender, EventArgs e)
         {
+            BorrarPantallas();
             if (SHIFT && HYP)
             {
                 PantallaEcuacion.Text += "arsenh";
@@ -877,6 +940,7 @@ namespace Calculadora_Segundo_Parcial
 
         private void Coseno_Click(object sender, EventArgs e)
         {
+            BorrarPantallas();
             if (SHIFT && HYP)
             {
                 PantallaEcuacion.Text += "arcosh";
@@ -901,6 +965,7 @@ namespace Calculadora_Segundo_Parcial
 
         private void button1_Click(object sender, EventArgs e)
         {
+            BorrarPantallas();
             if (SHIFT && HYP)
             {
                 PantallaEcuacion.Text += "artanh";
@@ -925,6 +990,7 @@ namespace Calculadora_Segundo_Parcial
 
         private void Log_Click(object sender, EventArgs e)
         {
+            BorrarPantallas();
             if (SHIFT)
             {
                 PantallaEcuacion.Text += "10^";
@@ -937,6 +1003,7 @@ namespace Calculadora_Segundo_Parcial
 
         private void LogN_Click(object sender, EventArgs e)
         {
+            BorrarPantallas();
             if (SHIFT)
             {
                 PantallaEcuacion.Text += "e^";
@@ -949,11 +1016,13 @@ namespace Calculadora_Segundo_Parcial
 
         private void ParAbierto_Click(object sender, EventArgs e)
         {
+            BorrarPantallas();
             PantallaEcuacion.Text += "(";
         }
 
         private void ParCerrado_Click(object sender, EventArgs e)
         {
+            BorrarPantallas();
             PantallaEcuacion.Text += ")";
         }
 
@@ -973,6 +1042,7 @@ namespace Calculadora_Segundo_Parcial
 
         private void RaizCuadrada_Click(object sender, EventArgs e)
         {
+            BorrarPantallas();
             if (SHIFT)
             {
                 PantallaEcuacion.Text += "³√";
@@ -985,6 +1055,7 @@ namespace Calculadora_Segundo_Parcial
 
         private void X_cuadrada_Click(object sender, EventArgs e)
         {
+            PasarResultado();
             if (SHIFT)
             {
                 PantallaEcuacion.Text += "³";
@@ -997,6 +1068,7 @@ namespace Calculadora_Segundo_Parcial
 
         private void Potencia_Click(object sender, EventArgs e)
         {
+            PasarResultado();
             if (SHIFT)
             {
                 PantallaEcuacion.Text += "ˣ√";
@@ -1009,11 +1081,13 @@ namespace Calculadora_Segundo_Parcial
 
         private void X_inversa_Click(object sender, EventArgs e)
         {
+            PasarResultado();
             PantallaEcuacion.Text += "⁻¹";
         }
 
         private void Pi_Click(object sender, EventArgs e)
         {
+            BorrarPantallas();
             if (SHIFT)
             {
                 PantallaEcuacion.Text += "e";
@@ -1027,6 +1101,21 @@ namespace Calculadora_Segundo_Parcial
         private void EXP_Click(object sender, EventArgs e)
         {
             PantallaEcuacion.Text += "E";
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            PantallaEcuacion.Text += answer;
+        }
+
+        private void PantallaEcuacion_TextChanged(object sender, EventArgs e)
+        {
+            PantallaEcuacion.ScrollToCaret();
+        }
+
+        private void MC_Click(object sender, EventArgs e)
+        {
+            answer = "";
         }
 
         private void Shift_Click(object sender, EventArgs e)

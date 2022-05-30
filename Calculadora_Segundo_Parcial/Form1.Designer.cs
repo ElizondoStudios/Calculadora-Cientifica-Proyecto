@@ -81,6 +81,8 @@
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
+            this.ANS = new System.Windows.Forms.Button();
+            this.MC = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // PantallaEcuacion
@@ -94,6 +96,7 @@
             this.PantallaEcuacion.Size = new System.Drawing.Size(355, 42);
             this.PantallaEcuacion.TabIndex = 0;
             this.PantallaEcuacion.WordWrap = false;
+            this.PantallaEcuacion.TextChanged += new System.EventHandler(this.PantallaEcuacion_TextChanged);
             // 
             // Siete
             // 
@@ -701,12 +704,36 @@
             this.label12.TabIndex = 52;
             this.label12.Text = "x³";
             // 
+            // ANS
+            // 
+            this.ANS.Font = new System.Drawing.Font("JetBrains Mono Medium", 10F, System.Drawing.FontStyle.Bold);
+            this.ANS.Location = new System.Drawing.Point(279, 130);
+            this.ANS.Name = "ANS";
+            this.ANS.Size = new System.Drawing.Size(47, 43);
+            this.ANS.TabIndex = 53;
+            this.ANS.Text = "ANS";
+            this.ANS.UseVisualStyleBackColor = true;
+            this.ANS.Click += new System.EventHandler(this.button1_Click_1);
+            // 
+            // MC
+            // 
+            this.MC.Font = new System.Drawing.Font("JetBrains Mono Medium", 10F, System.Drawing.FontStyle.Bold);
+            this.MC.Location = new System.Drawing.Point(110, 130);
+            this.MC.Name = "MC";
+            this.MC.Size = new System.Drawing.Size(47, 43);
+            this.MC.TabIndex = 54;
+            this.MC.Text = "MC";
+            this.MC.UseVisualStyleBackColor = true;
+            this.MC.Click += new System.EventHandler(this.MC_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.ClientSize = new System.Drawing.Size(443, 650);
+            this.Controls.Add(this.MC);
+            this.Controls.Add(this.ANS);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.label10);
@@ -822,6 +849,8 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Button ANS;
+        private System.Windows.Forms.Button MC;
     }
 }
 
