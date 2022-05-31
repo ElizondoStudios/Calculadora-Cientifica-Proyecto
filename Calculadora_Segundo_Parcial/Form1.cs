@@ -464,9 +464,17 @@ namespace Calculadora_Segundo_Parcial
                         {
                             Val1 = Tomar_Izquierda(expresion.Substring(0, k));
                             Val2 = Tomar_Derecha(expresion.Substring(k + 1));
-                            Resultado = Val1 / Val2;
-                            expresion = expresion.Replace(Val1.ToString() + "/" + Val2.ToString(), Resultado.ToString());
-                            return Resolver(expresion, 2);
+                            if (Val2 == 0)
+                            {
+                                PantallaEcuacion.Text = "Math Error";
+                                return "";
+                            }
+                            else
+                            {
+                                Resultado = Val1 / Val2;
+                                expresion = expresion.Replace(Val1.ToString() + "/" + Val2.ToString(), Resultado.ToString());
+                                return Resolver(expresion, 2);
+                            } 
                         }
                         else if(expresion[k] == '!')
                         {
@@ -479,17 +487,33 @@ namespace Calculadora_Segundo_Parcial
                         {
                             Val1 = Tomar_Izquierda(expresion.Substring(0, k));
                             Val2 = Tomar_Derecha(expresion.Substring(k + 1));
-                            Resultado = (Fact_Sigma((int)Val1, 1)) / (Fact_Sigma((int)Val2, 1) * Fact_Sigma((int)Val1 - (int)Val2, 1));
-                            expresion = expresion.Replace(Val1.ToString() + "C" + Val2.ToString(), Resultado.ToString());
-                            return Resolver(expresion, 2);
+                            if (Val2 > Val1)
+                            {
+                                PantallaEcuacion.Text = "Math Error";
+                                return "";
+                            }
+                            else
+                            {
+                                Resultado = (Fact_Sigma((int)Val1, 1)) / (Fact_Sigma((int)Val2, 1) * Fact_Sigma((int)Val1 - (int)Val2, 1));
+                                expresion = expresion.Replace(Val1.ToString() + "C" + Val2.ToString(), Resultado.ToString());
+                                return Resolver(expresion, 2);
+                            }
                         }
                         else if (expresion[k] == 'P')
                         {
                             Val1 = Tomar_Izquierda(expresion.Substring(0, k));
                             Val2 = Tomar_Derecha(expresion.Substring(k + 1));
-                            Resultado = (Fact_Sigma((int)Val1, 1)) / (Fact_Sigma((int)Val1 - (int)Val2, 1));
-                            expresion = expresion.Replace(Val1.ToString() + "P" + Val2.ToString(), Resultado.ToString());
-                            return Resolver(expresion, 2);
+                            if (Val2 > Val1)
+                            {
+                                PantallaEcuacion.Text = "Math Error";
+                                return "";
+                            }
+                            else
+                            {
+                                Resultado = (Fact_Sigma((int)Val1, 1)) / (Fact_Sigma((int)Val1 - (int)Val2, 1));
+                                expresion = expresion.Replace(Val1.ToString() + "P" + Val2.ToString(), Resultado.ToString());
+                                return Resolver(expresion, 2);
+                            }  
                         }
                     }
                     return Resolver(expresion, 1);
@@ -606,9 +630,17 @@ namespace Calculadora_Segundo_Parcial
                                 else
                                 {
                                     Val2 = Tomar_Derecha(expresion.Substring(k + 6));
-                                    Resultado=Math.Asin((Val2 * Math.PI) / 180);
-                                    expresion = expresion.Replace("arcsen" + Val2.ToString(), Resultado.ToString());
-                                    return Resolver(expresion, 4);
+                                    if(Val2>1 || Val2 < -1)
+                                    {
+                                        PantallaEcuacion.Text = "Math Error";
+                                        return "";
+                                    }
+                                    else
+                                    {
+                                        Resultado = Math.Asin((Val2 * Math.PI) / 180);
+                                        expresion = expresion.Replace("arcsen" + Val2.ToString(), Resultado.ToString());
+                                        return Resolver(expresion, 4);
+                                    }
                                 }
                             }
                             else if (expresion[k + 3] == 'c')
@@ -623,9 +655,17 @@ namespace Calculadora_Segundo_Parcial
                                 else
                                 {
                                     Val2 = Tomar_Derecha(expresion.Substring(k + 6));
-                                    Resultado=Math.Acos((Val2 * Math.PI) / 180);
-                                    expresion = expresion.Replace("arccos" + Val2.ToString(), Resultado.ToString());
-                                    return Resolver(expresion, 4);
+                                    if(Val2>1 || Val2 < -1)
+                                    {
+                                        PantallaEcuacion.Text = "Math Error";
+                                        return "";
+                                    }
+                                    else
+                                    {
+                                        Resultado = Math.Acos((Val2 * Math.PI) / 180);
+                                        expresion = expresion.Replace("arccos" + Val2.ToString(), Resultado.ToString());
+                                        return Resolver(expresion, 4);
+                                    }
                                 }
                             }
                             else if (expresion[k + 3] == 't')
@@ -694,16 +734,25 @@ namespace Calculadora_Segundo_Parcial
                             if (expresion[k + 3] == 'h')
                             {
                                 Val2 = Tomar_Derecha(expresion.Substring(k + 4));
-                                Resultado=Math.Tanh((Val2 * Math.PI) / 180);
+                                Resultado = Math.Tanh((Val2 * Math.PI) / 180);
                                 expresion = expresion.Replace("tanh" + Val2.ToString(), Resultado.ToString());
                                 return Resolver(expresion, 4);
                             }
                             else
                             {
                                 Val2 = Tomar_Derecha(expresion.Substring(k + 3));
-                                Resultado=Math.Tan((Val2 * Math.PI) / 180);
-                                expresion = expresion.Replace("tan" + Val2.ToString(), Resultado.ToString());
-                                return Resolver(expresion, 4);
+
+                                if ((Val2/180)%1==0)
+                                {
+                                    Resultado = Math.Tan((Val2 * Math.PI) / 180);
+                                    expresion = expresion.Replace("tan" + Val2.ToString(), Resultado.ToString());
+                                    return Resolver(expresion, 4);
+                                }
+                                else
+                                {
+                                    PantallaEcuacion.Text = "Math Error";
+                                    return "";
+                                }
                             }
                         }
                         else if (expresion[k] == 'l')
@@ -711,16 +760,34 @@ namespace Calculadora_Segundo_Parcial
                             if (expresion[k + 1] == 'n')
                             {
                                 Val2 = Tomar_Derecha(expresion.Substring(k + 2));
-                                Resultado = Math.Log(Val2);
-                                expresion = expresion.Replace("ln" + Val2.ToString(), Resultado.ToString());
-                                return Resolver(expresion, 4);
+                                if (Val2 >= 0)
+                                {
+                                    Resultado = Math.Log(Val2);
+                                    expresion = expresion.Replace("ln" + Val2.ToString(), Resultado.ToString());
+                                    return Resolver(expresion, 4);
+                                }
+                                else
+                                {
+                                    PantallaEcuacion.Text = "Math Error";
+                                    return "";
+                                }
+                                    
+                                
                             }
                             else
                             {
                                 Val2 = Tomar_Derecha(expresion.Substring(k + 3));
-                                Resultado = Math.Log10(Val2);
-                                expresion = expresion.Replace("log" + Val2.ToString(), Resultado.ToString());
-                                return Resolver(expresion, 4);
+                                if (Val2 >= 0)
+                                {
+                                    Resultado = Math.Log10(Val2);
+                                    expresion = expresion.Replace("log" + Val2.ToString(), Resultado.ToString());
+                                    return Resolver(expresion, 4);
+                                }
+                                else
+                                {
+                                    PantallaEcuacion.Text = "Math Error";
+                                    return "";
+                                }
                             }
                         }
                     }
@@ -814,33 +881,44 @@ namespace Calculadora_Segundo_Parcial
                 PantallaEcuacion.Clear();
             }
         }
+
+        void PantallaEnError()
+        {
+            if (PantallaEcuacion.Text == "Syntax Error" || PantallaEcuacion.Text == "Math Error")
+                PantallaEcuacion.Clear();
+        }
         /* ###########################################################
                              Funciones Botones
            ########################################################### */
 
         private void Igual_Click(object sender, EventArgs e)
         {
-            if (Syntax_Check(PantallaEcuacion.Text))
-                PantallaEcuacion.Text = "Syntax Error";
-            else
+            PantallaEnError();
+            if (PantallaEcuacion.Text != "")
             {
-                if (PantallaEcuacion.Text.IndexOf('(') != -1)
-                    PantallaResultados.Text = Entrar_parentesis(Interpreter(PantallaEcuacion.Text));
-                else if(PantallaEcuacion.Text.IndexOf('a') != -1 || PantallaEcuacion.Text.IndexOf('s') != -1 || PantallaEcuacion.Text.IndexOf('c') != -1 || PantallaEcuacion.Text.IndexOf('t') != -1)
-                    PantallaResultados.Text = Resolver(Interpreter(PantallaEcuacion.Text), 4);
-                else if(PantallaEcuacion.Text.IndexOf('l') != -1 || PantallaEcuacion.Text.IndexOf('e') != -1 || PantallaEcuacion.Text.IndexOf('π') != -1)
-                    PantallaResultados.Text = Resolver(Interpreter(PantallaEcuacion.Text), 4);
-                else if(PantallaEcuacion.Text.IndexOf('.') != -1)
-                    PantallaResultados.Text = Resolver(Interpreter(PantallaEcuacion.Text), 4);
+                if (Syntax_Check(PantallaEcuacion.Text))
+                    PantallaEcuacion.Text = "Syntax Error";
                 else
-                    PantallaResultados.Text = Resolver(PantallaEcuacion.Text, 4);
-                answer = PantallaResultados.Text;
+                {
+                    if (PantallaEcuacion.Text.IndexOf('(') != -1)
+                        PantallaResultados.Text = Entrar_parentesis(Interpreter(PantallaEcuacion.Text));
+                    else if (PantallaEcuacion.Text.IndexOf('a') != -1 || PantallaEcuacion.Text.IndexOf('s') != -1 || PantallaEcuacion.Text.IndexOf('c') != -1 || PantallaEcuacion.Text.IndexOf('t') != -1)
+                        PantallaResultados.Text = Resolver(Interpreter(PantallaEcuacion.Text), 4);
+                    else if (PantallaEcuacion.Text.IndexOf('l') != -1 || PantallaEcuacion.Text.IndexOf('e') != -1 || PantallaEcuacion.Text.IndexOf('π') != -1)
+                        PantallaResultados.Text = Resolver(Interpreter(PantallaEcuacion.Text), 4);
+                    else if (PantallaEcuacion.Text.IndexOf('.') != -1)
+                        PantallaResultados.Text = Resolver(Interpreter(PantallaEcuacion.Text), 4);
+                    else
+                        PantallaResultados.Text = Resolver(PantallaEcuacion.Text, 4);
+                    answer = PantallaResultados.Text;
+                }
             }
         }
 
         private void Factorial_Click(object sender, EventArgs e)
         {
             PasarResultado();
+            PantallaEnError();
             if (SHIFT)
             {
                 PantallaEcuacion.Text += "C";
@@ -854,6 +932,7 @@ namespace Calculadora_Segundo_Parcial
         private void Sumatoria_Click(object sender, EventArgs e)
         {
             PasarResultado();
+            PantallaEnError();
             if (SHIFT)
             {
                 PantallaEcuacion.Text += "P";
@@ -868,38 +947,43 @@ namespace Calculadora_Segundo_Parcial
         private void Modulo_Click(object sender, EventArgs e)
         {
             PasarResultado();
+            PantallaEnError();
             PantallaEcuacion.Text += "%";
         }
 
         private void Sumar_Click(object sender, EventArgs e)
         {
             PasarResultado();
+            PantallaEnError();
             PantallaEcuacion.Text += "+";
         }
 
         private void Multiplicar_Click(object sender, EventArgs e)
         {
             PasarResultado();
+            PantallaEnError();
             PantallaEcuacion.Text += "*";
         }
 
         private void Restar_Click(object sender, EventArgs e)
         {
             PasarResultado();
+            PantallaEnError();
             PantallaEcuacion.Text += "-";
         }
 
         private void Dividir_Click(object sender, EventArgs e)
         {
             PasarResultado();
+            PantallaEnError();
             PantallaEcuacion.Text += "/";
         }
 
         private void ClearError_Click(object sender, EventArgs e)
         {
-            if (PantallaEcuacion.Text == "Syntax Error")
-                PantallaEcuacion.Text = "";
-            else if (PantallaEcuacion.Text.Length != 0)
+            PantallaEnError();
+            PantallaResultados.Clear();
+            if (PantallaEcuacion.Text.Length != 0)
             {
                 int len = PantallaEcuacion.Text.Length;
                 if (PantallaEcuacion.Text[len - 1] == 'n' || PantallaEcuacion.Text[len - 1] == 's')
@@ -951,66 +1035,77 @@ namespace Calculadora_Segundo_Parcial
         private void Punto_Click(object sender, EventArgs e)
         {
             BorrarPantallas();
+            PantallaEnError();
             PantallaEcuacion.Text += ".";
         }
 
         private void Cero_Click(object sender, EventArgs e)
         {
             BorrarPantallas();
+            PantallaEnError();
             PantallaEcuacion.Text += "0";
         }
 
         private void Tres_Click(object sender, EventArgs e)
         {
             BorrarPantallas();
+            PantallaEnError();
             PantallaEcuacion.Text += "3";
         }
 
         private void Dos_Click(object sender, EventArgs e)
         {
             BorrarPantallas();
+            PantallaEnError();
             PantallaEcuacion.Text += "2";
         }
 
         private void Uno_Click(object sender, EventArgs e)
         {
             BorrarPantallas();
+            PantallaEnError();
             PantallaEcuacion.Text += "1";
         }
 
         private void Seis_Click(object sender, EventArgs e)
         {
             BorrarPantallas();
+            PantallaEnError();
             PantallaEcuacion.Text += "6";
         }
 
         private void Cinco_Click(object sender, EventArgs e)
         {
             BorrarPantallas();
+            PantallaEnError();
             PantallaEcuacion.Text += "5";
         }
 
         private void Cuatro_Click(object sender, EventArgs e)
         {
             BorrarPantallas();
+            PantallaEnError();
             PantallaEcuacion.Text += "4";
         }
 
         private void Nueve_Click(object sender, EventArgs e)
         {
             BorrarPantallas();
+            PantallaEnError();
             PantallaEcuacion.Text += "9";
         }
 
         private void Ocho_Click(object sender, EventArgs e)
         {
             BorrarPantallas();
+            PantallaEnError();
             PantallaEcuacion.Text += "8";
         }
 
         private void Seno_Click(object sender, EventArgs e)
         {
             BorrarPantallas();
+            PantallaEnError();
             if (SHIFT && HYP)
             {
                 PantallaEcuacion.Text += "arcsenh";
@@ -1036,6 +1131,7 @@ namespace Calculadora_Segundo_Parcial
         private void Coseno_Click(object sender, EventArgs e)
         {
             BorrarPantallas();
+            PantallaEnError();
             if (SHIFT && HYP)
             {
                 PantallaEcuacion.Text += "arccosh";
@@ -1061,6 +1157,7 @@ namespace Calculadora_Segundo_Parcial
         private void button1_Click(object sender, EventArgs e)
         {
             BorrarPantallas();
+            PantallaEnError();
             if (SHIFT && HYP)
             {
                 PantallaEcuacion.Text += "arctanh";
@@ -1086,6 +1183,7 @@ namespace Calculadora_Segundo_Parcial
         private void Log_Click(object sender, EventArgs e)
         {
             BorrarPantallas();
+            PantallaEnError();
             if (SHIFT)
             {
                 PantallaEcuacion.Text += "10^";
@@ -1099,6 +1197,7 @@ namespace Calculadora_Segundo_Parcial
         private void LogN_Click(object sender, EventArgs e)
         {
             BorrarPantallas();
+            PantallaEnError();
             if (SHIFT)
             {
                 PantallaEcuacion.Text += "e^";
@@ -1112,12 +1211,14 @@ namespace Calculadora_Segundo_Parcial
         private void ParAbierto_Click(object sender, EventArgs e)
         {
             BorrarPantallas();
+            PantallaEnError();
             PantallaEcuacion.Text += "(";
         }
 
         private void ParCerrado_Click(object sender, EventArgs e)
         {
             BorrarPantallas();
+            PantallaEnError();
             PantallaEcuacion.Text += ")";
         }
 
@@ -1138,6 +1239,7 @@ namespace Calculadora_Segundo_Parcial
         private void RaizCuadrada_Click(object sender, EventArgs e)
         {
             BorrarPantallas();
+            PantallaEnError();
             if (SHIFT)
             {
                 PantallaEcuacion.Text += "³√";
@@ -1151,6 +1253,7 @@ namespace Calculadora_Segundo_Parcial
         private void X_cuadrada_Click(object sender, EventArgs e)
         {
             PasarResultado();
+            PantallaEnError();
             if (SHIFT)
             {
                 PantallaEcuacion.Text += "³";
@@ -1164,6 +1267,7 @@ namespace Calculadora_Segundo_Parcial
         private void Potencia_Click(object sender, EventArgs e)
         {
             PasarResultado();
+            PantallaEnError();
             if (SHIFT)
             {
                 PantallaEcuacion.Text += "ˣ√";
@@ -1177,12 +1281,14 @@ namespace Calculadora_Segundo_Parcial
         private void X_inversa_Click(object sender, EventArgs e)
         {
             PasarResultado();
+            PantallaEnError();
             PantallaEcuacion.Text += "⁻¹";
         }
 
         private void Pi_Click(object sender, EventArgs e)
         {
             BorrarPantallas();
+            PantallaEnError();
             if (SHIFT)
             {
                 PantallaEcuacion.Text += "e";
@@ -1195,12 +1301,15 @@ namespace Calculadora_Segundo_Parcial
 
         private void EXP_Click(object sender, EventArgs e)
         {
+            PasarResultado();
+            PantallaEnError();
             PantallaEcuacion.Text += "E";
         }
 
         private void button1_Click_1(object sender, EventArgs e)
         {
             BorrarPantallas();
+            PantallaEnError();
             PantallaEcuacion.Text += answer;
         }
 
@@ -1231,6 +1340,7 @@ namespace Calculadora_Segundo_Parcial
         private void Siete_Click(object sender, EventArgs e)
         {
             BorrarPantallas();
+            PantallaEnError();
             PantallaEcuacion.Text += "7";
         }
     }
