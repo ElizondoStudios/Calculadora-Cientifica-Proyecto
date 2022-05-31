@@ -675,9 +675,18 @@ namespace Calculadora_Segundo_Parcial
                             else
                             {
                                 Val2 = Tomar_Derecha(expresion.Substring(k + 3));
-                                Resultado =Math.Cos((Val2 * Math.PI) / 180);
-                                expresion = expresion.Replace("cos" + Val2.ToString(), Resultado.ToString());
-                                return Resolver(expresion, 4);
+                                if (Val2 != 90)
+                                {
+                                    Resultado = Math.Cos((Val2 * Math.PI) / 180);
+                                    expresion = expresion.Replace("cos" + Val2.ToString(), Resultado.ToString());
+                                    return Resolver(expresion, 4);
+                                }
+                                else
+                                {
+                                    expresion = expresion.Replace("cos" + Val2.ToString(), "0");
+                                    return Resolver(expresion, 4);
+                                }
+                                
                             }
                         }
                         else if (expresion[k] == 't')
