@@ -119,33 +119,12 @@ namespace Calculadora_Segundo_Parcial
             if (expresion.IndexOf("---") >= 0)
                 return true;
             //Operador de menor jerarquia antes de mayor
-            char[] opJer4 = new char[] {'s','c','t','a','l'};
-            char[] opJer3 = new char[] {'^', '%','³', '√', 'ˣ', '²', '⁻' };
+            char[] opJer3 = new char[] {'^', '%','ˣ', '²', '⁻' };
             char[] opJer2 = new char[] {'*','/','!'};
             char[] opJer1 = new char[] {'+','-', 'Σ' };
 
             for (int i = 2; i < expresion.Length; i++)
             {
-                foreach(char a in opJer4)
-                {
-                    foreach (char b in opJer3)
-                    {
-                        if (expresion[i] == a && expresion[i - 1] == b)
-                            return true;
-                    }
-
-                    foreach (char b in opJer2)
-                    {
-                        if (expresion[i] == a && expresion[i - 1] == b)
-                            return true;
-                    }
-
-                    foreach (char b in opJer1)
-                    {
-                        if (expresion[i] == a && expresion[i - 1] == b)
-                            return true;
-                    }
-                }
 
                 foreach (char a in opJer3)
                 {
